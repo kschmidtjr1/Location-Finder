@@ -1,0 +1,109 @@
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/info_saved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/frame"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/saved"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <RelativeLayout
+        android:id="@+id/map_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/frame"
+        android:padding="5dp"
+        android:visibility="gone" >
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:enabled="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/frame"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:drawableTop="@drawable/ic_action_important"
+                android:gravity="bottom|center"
+                android:minHeight="90dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="20dp"
+                android:text="@string/fav" />
+
+            <Button
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_action_view_as_list"
+                android:gravity="bottom|center"
+                android:minHeight="90dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="20dp"
+                android:text="@string/isnote" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/gps_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:drawableTop="@drawable/ic_action_map"
+                android:gravity="bottom|center"
+                android:minHeight="90dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="20dp"
+                android:text="@string/gps" />
+
+            <Button
+                android:id="@+id/show_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_action_picture"
+                android:gravity="bottom|center"
+                android:minHeight="90dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="20dp"
+                android:text="@string/ispicture" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
