@@ -42,11 +42,14 @@ public class HistoryMark extends Fragment implements OnItemClickListener{
 		
 		historyListView.setAdapter(adapter);
 		TextView noHistory = (TextView) rootView.findViewById(R.id.noHistory);
-		if(historyList.size() < 1)
+		if(historyList.size() < 1){
 			historyListView.setVisibility(View.GONE);
-		else
+			noHistory.setVisibility(View.VISIBLE);
+		}
+		else{
 			noHistory.setVisibility(View.GONE);
-		
+			historyListView.setVisibility(View.VISIBLE);
+		}
 		return rootView;
 	}
 	
@@ -59,7 +62,8 @@ public class HistoryMark extends Fragment implements OnItemClickListener{
 		public View getView(int position, View convertView, ViewGroup parent){
 			View itemView = convertView;
 			if(itemView == null){
-				itemView = getActivity().getLayoutInflater().inflate(R.layout.item_view, parent, false);
+				itemView = getActivity().getLayoutInflater().inflate(
+						R.layout.item_view, parent, false);
 			}
 			SQLiteLocation currentPast = historyList.get(historyList.size()-position-1);
 		
@@ -73,18 +77,18 @@ public class HistoryMark extends Fragment implements OnItemClickListener{
 			date.setText(currentPast.getDate());
 			
 			ImageView note = (ImageView) itemView.findViewById(R.id.item_note);
-			if(currentPast.getNote().equalsIgnoreCase(""))
+			if(currentPast.getNote() == null || currentPast.getNote().equals(""))
 				note.setImageBitmap(null);
 			else
 				note.setImageBitmap(BitmapFactory.decodeResource(getResources(),
 						R.drawable.ic_action_view_as_list));
 			
 			ImageView image = (ImageView) itemView.findViewById(R.id.item_image);
-			if(currentPast.getPicture() == null)
+			if(currentPast.getPicture().length < 1)
 				image.setImageBitmap(null);
 			else
-				image.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-						R.drawable.ic_action_picture));
+				image.setImageBitmap(BitmapFactory.decodeResource(
+						getResources(), R.drawable.ic_action_picture));
 			return itemView;
 		}
 	}
