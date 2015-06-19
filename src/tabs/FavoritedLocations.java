@@ -41,11 +41,14 @@ public class FavoriteMark extends Fragment implements OnItemClickListener {
 		ArrayAdapter<SQLiteLocation> adapter = new FavoriteAdapter();
 		favoriteListView.setAdapter(adapter);
 		TextView noFavorites = (TextView) rootView.findViewById(R.id.noFavorite);
-		if(favoriteList.size() < 1)
+		if(favoriteList.size() < 1) {
 			favoriteListView.setVisibility(View.GONE);
-		else
+			noFavorites.setVisibility(View.VISIBLE);
+		}
+		else{
 			noFavorites.setVisibility(View.GONE);
-		
+			favoriteListView.setVisibility(View.VISIBLE);
+		}
 		return rootView;
 	}
 	
@@ -57,7 +60,8 @@ public class FavoriteMark extends Fragment implements OnItemClickListener {
 		public View getView(int position, View convertView, ViewGroup parent){
 			View itemView = convertView;
 			if(itemView == null){
-				itemView = getActivity().getLayoutInflater().inflate(R.layout.fav_item_view, parent, false);
+				itemView = getActivity().getLayoutInflater().inflate(
+						R.layout.fav_item_view, parent, false);
 			}
 			SQLiteLocation currentPast = favoriteList.get(favoriteList.size()-position-1);
 
@@ -68,16 +72,18 @@ public class FavoriteMark extends Fragment implements OnItemClickListener {
 			address.setText(currentPast.getAddress());
 			
 			ImageView note = (ImageView) itemView.findViewById(R.id.fav_note);
-			if(currentPast.getNote().equalsIgnoreCase(""))
+			if(currentPast.getNote() == null || currentPast.getNote().equalsIgnoreCase(""))
 				note.setImageBitmap(null);
 			else
-				note.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_view_as_list));
+				note.setImageBitmap(BitmapFactory.decodeResource(
+						getResources(), R.drawable.ic_action_view_as_list));
 			
 			ImageView image = (ImageView) itemView.findViewById(R.id.fav_image);
-			if(currentPast.getPicture() == null)
+			if(currentPast.getPicture().length < 1)
 				image.setImageBitmap(null);
 			else
-				image.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_picture));
+				image.setImageBitmap(BitmapFactory.decodeResource(
+						getResources(), R.drawable.ic_action_picture));
 				
 			return itemView;
 		}
