@@ -9,14 +9,13 @@ public class SQLiteLocation {
 	private String _note;	//7
 	private byte[] _picture;//8 blob
 	private boolean _favorite;//9 boolean
-	private int _fav_pos;	//10 integer
 	
 	public SQLiteLocation(){}
 	
 	public SQLiteLocation(int id, double lat, double lng, 
 			String address, String date, String time, 
 			String name, String note, byte[] picture,
-			boolean favorite, int fav_pos){
+			boolean favorite){
 		this._id = id;
 		this._lat = lat;
 		this._lng = lng;
@@ -27,7 +26,6 @@ public class SQLiteLocation {
 		this._note = note;
 		this._picture = picture;
 		this._favorite = favorite;
-		this._fav_pos = fav_pos;
 	}
 	
 	public SQLiteLocation(SQLiteLocation pastLoc){
@@ -40,7 +38,6 @@ public class SQLiteLocation {
 		this._picture = pastLoc.getPicture();
 		this._note = pastLoc.getNote();
 		this._favorite = pastLoc.isFavorite();
-		this._fav_pos = pastLoc.getPos();
 	}
 
 	public int getId() {
@@ -129,14 +126,6 @@ public class SQLiteLocation {
 
 	public void setFavorite(boolean favorite) {
 		this._favorite = favorite;
-	}
-	
-	public int getPos() {
-		return _fav_pos;
-	}
-	
-	public void setPos(int pos) {
-		this._fav_pos = pos;
 	}
 	
 }
