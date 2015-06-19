@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/customFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".CustomMark" >
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/welcome"
+        android:background="@color/frame"
+        android:layout_marginBottom="8dp"
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/contentLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/frame"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/frame1"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/etNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:layout_marginRight="5dp"
+                android:focusableInTouchMode="true"
+                android:hint="@string/message"
+                android:imeOptions="actionDone"
+                android:scrollbars="vertical" />
+
+            <ImageButton
+                android:id="@+id/takePic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_action_camera"
+                android:contentDescription="@string/pic_descript" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/setLoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/done"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
