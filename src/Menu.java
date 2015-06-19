@@ -110,11 +110,11 @@ class MyAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int arg0) {
 		Fragment fragment = null;
 		if (arg0 == 0)
-			fragment = new FavoriteMark();
+			fragment = new FavoritedLocations();
 		else if (arg0 == 1)
-			fragment = new CustomMark();
+			fragment = new NewLocation();
 		else
-			fragment = new HistoryMark();
+			fragment = new PastLocations();
 		return fragment;
 	}
 	
