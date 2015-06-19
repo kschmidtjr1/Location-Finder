@@ -31,7 +31,7 @@ public class HistoryMark extends Fragment implements OnItemClickListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_history_mark, container,
+		View rootView = inflater.inflate(R.layout.fragment_history, container,
 				false);
 
 		historyList = Menu.db.getAllLocations();
