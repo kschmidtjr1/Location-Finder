@@ -74,7 +74,6 @@ public class CustomMark extends Fragment implements OnClickListener {
 	}
 	public void onPause() {
 		super.onPause();
-		btmp = null;
 	}
 	public void onResume() {
 		super.onResume();
@@ -104,15 +103,13 @@ public class CustomMark extends Fragment implements OnClickListener {
 		textIn.setSingleLine(false);
 		textIn.setFocusableInTouchMode(true);
 
-		takePic = (ImageButton) getView()
-				.findViewById(R.id.takePic);
+		takePic = (ImageButton) getView().findViewById(R.id.takePic);
 		takePic.setOnClickListener(this);
 
 		done = (Button) getView().findViewById(R.id.setLoc);
 		done.setOnClickListener(this);
 
-		geocoder = new Geocoder(getView().getContext(),
-				Locale.getDefault());
+		geocoder = new Geocoder(getView().getContext(), Locale.getDefault());
 
 		int status = GooglePlayServicesUtil
 				.isGooglePlayServicesAvailable(getView().getContext());
@@ -175,8 +172,8 @@ public class CustomMark extends Fragment implements OnClickListener {
 			startActivityForResult(camera, 0);
 			break;
 		case R.id.setLoc:
-			final Intent data = new Intent(getView().getContext(),
-					Confirm.class);
+			imm.hideSoftInputFromWindow(textIn.getWindowToken(), 0);
+			final Intent data = new Intent(getView().getContext(), Confirm.class);
 			Location myCar = locationManager.getLastKnownLocation(provider);
 			String notes = textIn.getText().toString();
 			try {
@@ -189,15 +186,14 @@ public class CustomMark extends Fragment implements OnClickListener {
 			currentData.setDoubleLat(myCar.getLatitude());
 			currentData.setDoubleLng(myCar.getLongitude());
 			if (addresses != null)
-				currentData
-						.setAddress(addresses.get(0).getAddressLine(0) + ".");
+				currentData.setAddress(addresses.get(0).getAddressLine(0) + ".");
+			String notes = textIn.getText().toString();
 			currentData.setNote(notes);
 
 			Calendar c = Calendar.getInstance();
-			currentData
-					.setDate(c.get(Calendar.MONTH) + 1 + "/"
-							+ c.get(Calendar.DAY_OF_MONTH) + "/"
-							+ c.get(Calendar.YEAR));
+			currentData.setDate(c.get(Calendar.MONTH) + 1 + "/"
+					+ c.get(Calendar.DAY_OF_MONTH) + "/"
+					+ c.get(Calendar.YEAR));
 			String am_pm;
 			if (c.get(Calendar.AM_PM) == (Calendar.AM))
 				am_pm = "a.m.";
@@ -226,19 +222,13 @@ public class CustomMark extends Fragment implements OnClickListener {
 			}
 			currentData.setFavorite(false);
 			currentData.setName("");
-			currentData.setPos(-1);
 			
-			Menu.db.open();
-			Menu.db.addLocation(currentData);
-			Menu.db.close();
-			data.putExtra("id", 0);
+			long dbID = Menu.db.addLocation(currentData);
+			data.putExtra("id", dbID);
 
 			leaveAct = true;
-			Log.i("TAG", "added location! There are now "
-							+ Menu.db.getLocationsCount()
-							+ " locations saved to the list. info:\n");
-			// startActivity(data);
-			// done.setClickable(false);
+			startActivity(data);
+			done.setClickable(false);
 			break;
 
 		}
