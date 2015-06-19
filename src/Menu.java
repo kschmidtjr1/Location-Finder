@@ -24,19 +24,12 @@ public class Menu extends ActionBarActivity implements TabListener {
 		super.onCreate(arg0);
 		setContentView(R.layout.main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		db = new DatabaseHandler(this);
+		if(db == null)
+			db = new DatabaseHandler(this);
 		
 		favoriteList = new ArrayList<SQLiteLocation>(); 
 		favChange = favoriteList.size();
-	/*	if(db.getLocationsCount() > 0){
-			for(int i = 1; i <= db.getLocationsCount(); i++) {
-				if(db.getLocation(i).isFavorite()){
-					db.getLocation(i).setPos(favoriteList.size());
-					favoriteList.add(db.getLocation(i));
-				}
-			}
-		}
-	 */
+
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -70,17 +63,6 @@ public class Menu extends ActionBarActivity implements TabListener {
 		actionBar.addTab(favorite);
 		actionBar.addTab(custom, true);
 		actionBar.addTab(history);
-	}
-	
-	public static void saveFavorite(SQLiteLocation newFav){
-		db.getLocation(newFav.getId()).setFavorite(true);
-		db.getLocation(newFav.getId()).setPos(favoriteList.size());
-		favoriteList.add(newFav);
-	}
-	
-	public static void deleteFavorite(SQLiteLocation deleteFav){
-		db.getLocation(deleteFav.getId()).setFavorite(false);
-		favoriteList.remove(deleteFav.getPos());
 	}
 
 	@Override
