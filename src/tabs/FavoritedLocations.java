@@ -18,12 +18,12 @@ import android.widget.TextView;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  * 
  */
-public class FavoriteMark extends Fragment implements OnItemClickListener {
+public class FavoritedLocations extends Fragment implements OnItemClickListener {
 
 	private ArrayList<SQLiteLocation> favoriteList;
 	private ListView favoriteListView;
 	
-	public FavoriteMark() {
+	public FavoritedLocations() {
 		// Required empty public constructor
 	}
 
