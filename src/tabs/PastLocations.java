@@ -18,12 +18,12 @@ import android.widget.TextView;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  * 
  */
-public class HistoryMark extends Fragment implements OnItemClickListener{
+public class PastLocations extends Fragment implements OnItemClickListener{
 
 	private List<SQLiteLocation> historyList;
 	private ListView historyListView;
 	
-	public HistoryMark() {
+	public PastLocations() {
 		// Required empty public constructor
 	}
 
