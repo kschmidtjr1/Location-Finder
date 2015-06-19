@@ -38,7 +38,7 @@ import android.widget.Toast;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  * 
  */
-public class CustomMark extends Fragment implements OnClickListener {
+public class NewLocation extends Fragment implements OnClickListener {
 
 	private SQLiteLocation currentData;
 	
@@ -56,7 +56,7 @@ public class CustomMark extends Fragment implements OnClickListener {
 	private Geocoder geocoder;
 	private Bitmap btmp;
 
-	public CustomMark() {
+	public NewLocation() {
 		// Required empty public constructor
 	}
 
