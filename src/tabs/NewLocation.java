@@ -65,7 +65,7 @@ public class CustomMark extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		return inflater
-				.inflate(R.layout.fragment_custom_mark, container, false);
+				.inflate(R.layout.fragment_new_location, container, false);
 	}
 
 	public void onStart() {
