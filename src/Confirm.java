@@ -17,10 +17,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-//import android.view.ViewPropertyAnimator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,7 +41,8 @@ import android.hardware.SensorManager;
 public class Confirm extends Activity implements OnClickListener, SensorEventListener{
 
 	private SQLiteLocation pastLoc;
-	private int dbId;
+	private long dbId;
+	private int favPos;
 	
 	private GoogleMap gMap;
 	private LatLng carPos;
@@ -60,7 +61,7 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 	private Button noteTxt;
 	private Button getMap;
 	private Intent i;
-	private float na;
+	private float disabled;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,19 +122,25 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 		i = getIntent();
 		dbId = i.getIntExtra("id", 0);
 		pastLoc = Menu.db.getLocation(dbId);
+		// check that ID is being set correctly
+		Log.e("TAG", "PastLoc ID: "+pastLoc.getID());
+		if (pastLoc == null) {
+			pastLoc = new SQLiteLocation();
+			Log.e("TAG", "PastLoc is NULL");
+		}
 		
 		// Define layout
 		TextView header = (TextView) findViewById(R.id.info_saved);
-		if(pastLoc.getAddress().equalsIgnoreCase(""))
-			header.setText("Could not find address of your location");
-		else if(pastLoc.isFavorite() && !pastLoc.getName().equals(""))
-			header.setText("Your location saved to "+pastLoc.getName()+
-					" (" + pastLoc.getAddress() + ")");
+		if (pastLoc.getAddress() == null || pastLoc.getAddress().equals(""))
+			header.setText("Could not find address of your location.");
+		else if (pastLoc.isFavorite() && !pastLoc.getName().equals(""))
+			header.setText("Your location saved to " + pastLoc.getName() + " ("
+					+ pastLoc.getAddress() + ")");
 		else
-			header.setText("Your location saved to "+pastLoc.getAddress());
-		
+			header.setText("Your location saved to " + pastLoc.getAddress());
+		// note button
 		noteTxt = (Button) findViewById(R.id.note);
-		if(pastLoc.getNote().equals("")){
+		if(pastLoc.getNote() == null || pastLoc.getNote().equals("")){
 			noteTxt.setText("Add Note");
 			noteTxt.setCompoundDrawablesWithIntrinsicBounds(0,
 					R.drawable.ic_action_new_event, 0, 0);
@@ -145,9 +152,10 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 		}
 		noteTxt.setOnClickListener(this);
 		
+		//picture button
 		imageTxt = (Button) findViewById(R.id.show_image);
-		if(!pastLoc.isFavorite()){
-			imageTxt.setAlpha(na);
+		if(pastLoc.getPicture() == null || pastLoc.getPicture().length==0){
+			imageTxt.setAlpha(disabled);
 			imageTxt.setClickable(false);
 		}
 		else{
@@ -155,11 +163,13 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 			imageTxt.setClickable(true);
 			imageTxt.setOnClickListener(this);
 		}
-
+		
+		//favorite button
 		favorite = (Button) findViewById(R.id.favorite);
 		if(pastLoc.isFavorite()){
 			favorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_action_remove, 0, 0);
 			favorite.setText("Delete Favorite");
+			favPos = Menu.favoriteList.indexOf(pastLoc);
 		}
 		else{
 			favorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_action_important, 0, 0);
@@ -214,6 +224,8 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 				getMap.setText("Open Map");
 			}
 			break;
+			
+		// button press events
 		case R.id.favorite:
 			if(!pastLoc.isFavorite()){
 				final EditText input = new EditText(this);
@@ -242,13 +254,14 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 									pastLoc.setName(input.getText().toString());
 								else
 									pastLoc.setName(input.getText().toString()+Integer.toString(repeats));
-								Menu.saveFavorite(pastLoc);
-								favorite.setAlpha(1);
+								pastLoc.setFavorite(true);
+								Menu.favoriteList.add(pastLoc);
+								Menu.db.updateLocation(pastLoc);
+								
 								Toast.makeText(Confirm.this, "Favorite Saved",
 										Toast.LENGTH_SHORT).show();
 								favorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_action_remove, 0, 0);
 								favorite.setText("Delete Favorite");
-								pastLoc.setFavorite(true);
 							}
 						})
 				.setNegativeButton(android.R.string.cancel,
@@ -263,11 +276,15 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 				
 			}
 			else{
-				Menu.deleteFavorite(pastLoc);
-				Toast.makeText(Confirm.this, "Favorite Deleted", Toast.LENGTH_SHORT).show();
-				favorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_action_important, 0, 0);
-				favorite.setText("Favorite");
 				pastLoc.setFavorite(false);
+				Menu.favoriteList.remove(pastLoc);
+				Menu.db.updateLocation(pastLoc);
+				
+				Toast.makeText(Confirm.this, "Favorite Deleted",
+						Toast.LENGTH_SHORT).show();
+				favorite.setCompoundDrawablesWithIntrinsicBounds(0,
+						R.drawable.ic_action_important, 0, 0);
+				favorite.setText("Favorite");
 			}
 			break;
 		case R.id.note:
@@ -287,21 +304,17 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 										R.drawable.ic_action_new_event, 0, 0);
 								noteTxt.setText("Add Note");
 								pastLoc.setNote("");
-								Menu.db.getLocation(dbId);
-								if(pastLoc.isFavorite())
-									Menu.favoriteList.get(pastLoc.getPos()).setNote("");
 							}
 							else{
 								noteTxt.setCompoundDrawablesWithIntrinsicBounds(0,
 										R.drawable.ic_action_view_as_list, 0, 0);
 								noteTxt.setText("Edit Note");
 								pastLoc.setNote(etNote.getText().toString());
-								Menu.db.getLocation(dbId)
-										.setNote(etNote.getText().toString());
-								if(pastLoc.isFavorite())
-									Menu.favoriteList.get(pastLoc.getPos())
-											.setNote(etNote.getText().toString());
 							}
+							if(pastLoc.isFavorite())
+								Menu.favoriteList.set(favPos, pastLoc);
+								//replace favorite with updated object
+							Menu.db.updateLocation(pastLoc);
 						}
 					})
 			.setNegativeButton("Delete",
@@ -314,9 +327,9 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 									R.drawable.ic_action_new_event, 0, 0);
 							noteTxt.setText("Add Note");
 							pastLoc.setNote("");
-							Menu.db.getLocation(dbId).setNote("");
 							if(pastLoc.isFavorite())
-								Menu.favoriteList.get(pastLoc.getPos()).setNote("");
+								Menu.favoriteList.set(favPos, pastLoc);
+							Menu.db.updateLocation(pastLoc);
 						}
 					})
 			.setNeutralButton(android.R.string.cancel,
@@ -324,9 +337,7 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 						public void onClick(DialogInterface dialog,
 								int which) {
 						}
-					})
-			.setView(etNote)
-			.show();
+					}).setView(etNote).show();
 			break;
 		case R.id.show_image:
 			Intent viewPic = new Intent(Confirm.this, ImageViewer.class);
