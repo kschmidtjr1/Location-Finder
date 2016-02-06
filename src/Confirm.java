@@ -155,7 +155,7 @@ public class Confirm extends Activity implements OnClickListener, SensorEventLis
 		//picture button
 		imageTxt = (Button) findViewById(R.id.show_image);
 		if(pastLoc.getPicture() == null || pastLoc.getPicture().length==0){
-			imageTxt.setAlpha(disabled);
+			imageTxt.setAlpha(.5);
 			imageTxt.setClickable(false);
 		}
 		else{
